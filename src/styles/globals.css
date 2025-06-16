@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #8B4513;
+  --primary-light: #D2B48C;
+  --primary-dark: #5C2D0C;
+  --secondary: #F4EDE4;
+  --secondary-dark: #D9C7B2;
+}
+
+body {
+  @apply bg-secondary text-gray-900;
+}
+
+button, .btn {
+  @apply bg-primary text-amber-500 px-4 py-2 rounded-md hover:bg-primary-dark transition-colors;
+}
+
+input, select, textarea {
+  @apply border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-light;
+}
