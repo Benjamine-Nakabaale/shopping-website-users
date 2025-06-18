@@ -4,7 +4,6 @@ import { fetchProducts, getCategories } from '../services/productService';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/footer';
 import Searching from '../components/searching';
-import SearchFilters from '../components/SearchFilters';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
