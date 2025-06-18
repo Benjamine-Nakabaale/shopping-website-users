@@ -2,18 +2,28 @@ import { supabase } from './supabaseClient';
 
 export const signUp = async (email, password, fullName) => {
   try {
-    const { data, error } = await supabase.auth.signUp({
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email,
-      password,
-      options: {
-        data: { full_name: fullName }
-      }
+      password
     });
-    if (error) {
-      console.error('Sign-up error:', error);
-      return { data: null, error };
+
+    if (signUpError) {
+      console.error('Sign-up error:', signUpError);
+      return { data: null, error: signUpError };
     }
-    return { data, error: null };
+
+    // Insert fullName into profiles table
+    const user = signUpData.user;
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .insert([{ id: user.id, full_name: fullName }]); // Ensure you have a "profiles" table with "id" and "full_name" columns
+
+    if (profileError) {
+      console.error('Profile insert error:', profileError);
+      return { data: null, error: profileError };
+    }
+
+    return { data: signUpData, error: null };
   } catch (err) {
     console.error('Unexpected error in signUp:', err);
     return { data: null, error: { message: err.message || 'Unexpected error' } };
