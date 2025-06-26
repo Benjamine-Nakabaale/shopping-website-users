@@ -4,12 +4,12 @@ import HomePage from "../components/Homepage"
 
 export default function Landing(){
   return (
-    <>
+    <div Classname="bg-white">
       <Banner />
       <HomePage/>
       <Footer />
       
-    </>
+    </div>
   );
 };
 

@@ -49,56 +49,6 @@ export const fetchProducts = async (search = '', category = '', sortBy = 'create
   }
 };
 
-export const fetchProductById = async (id) => {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select(`
-        id, name, description, price, category, image_url, available, created_at,
-        product_ratings (
-          id,
-          rating,
-          review,
-          created_at,
-          user_id,
-          profiles!product_ratings_user_id_fkey (full_name)
-        )
-      `)
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      console.error('Fetch product error:', error);
-      return { data: null, error };
-    }
-
-    if (data) {
-      const ratings = data.product_ratings || [];
-      const avgRating = ratings.length > 0 
-        ? ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length 
-        : 0;
-      
-      return {
-        data: {
-          ...data,
-          product_ratings: ratings.map(r => ({
-            ...r,
-            profiles: r.profiles || { full_name: 'Anonymous' }
-          })),
-          averageRating: Math.round(avgRating * 10) / 10,
-          totalReviews: ratings.length
-        },
-        error: null
-      };
-    }
-
-    return { data, error: null };
-  } catch (err) {
-    console.error('Unexpected error in fetchProductById:', err);
-    return { data: null, error: { message: err.message || 'Unexpected error' } };
-  }
-};
-
 export const getCategories = async () => {
   try {
     const { data, error } = await supabase
